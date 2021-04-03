@@ -12,8 +12,25 @@ nextApp.prepare().then(() => {
     const app = express()
     const server = http.Server(app)
     const io = socket(server)
+    let question =
 
-    app.get("/test", (req, res) => {
+    io.on("connection", (socket) => {
+        socket.on("question:update", newQuestion => {
+
+            io.emit("question:new", newQuestion)
+        })
+
+        socket.on("question:hideToggle", question => {
+
+        })
+
+        socket.on("question:clearVote", () => {
+
+        })
+    })
+
+    app.get("/vote", (req, res) => {
+
         io.emit("vote", 1)
         res.status(200).send()
     })
