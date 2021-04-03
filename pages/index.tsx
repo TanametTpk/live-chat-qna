@@ -43,7 +43,7 @@ const _choices: IChoice[] = [
 const socket = socketIOClient("http://localhost:3000")
 export default function Home() {
   const [question, setQuestion] = useState<string>("-")
-  const [choices, setChoices] = useState<IChoice[]>(_choices)
+  const [choices, setChoices] = useState<IChoice[]>([])
 
   useEffect(() => {
     socket.on("connect", (data: IQuestion) => {
@@ -60,7 +60,7 @@ export default function Home() {
       }))
     })
 
-    socket.on("new-question", (data: IQuestion) => {
+    socket.on("question:new", (data: IQuestion) => {
       setupQuestion(data)
     })
 
