@@ -3,6 +3,7 @@ import Question from '../components/Question'
 import IChoice from '../interfaces/Choice'
 import socketIOClient  from 'socket.io-client'
 import { useEffect, useState } from 'react'
+import IQuestion from '../interfaces/Question'
 
 const _choices: IChoice[] = [
   {
@@ -41,24 +42,38 @@ const _choices: IChoice[] = [
 ]
 const socket = socketIOClient("http://localhost:3000")
 export default function Home() {
+  const [question, setQuestion] = useState<string>("-")
   const [choices, setChoices] = useState<IChoice[]>(_choices)
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.on("connect", (data: IQuestion) => {
+      // send current state here and set it.
       console.log("connected");
+      setupQuestion(data)
     })
 
-    socket.on("vote", data => {
+    socket.on("vote", (data: IChoice) => {
       console.log("receive", data);
-      let copyChoice = [...choices]
-      copyChoice[0].percent += 1
-      setChoices(copyChoice)
+      setChoices(choices.map((choice) => {
+        if (choice.title === data.title) return data
+        return choice
+      }))
+    })
+
+    socket.on("new-question", (data: IQuestion) => {
+      setupQuestion(data)
     })
 
     return (() => {
       socket.disconnect()
     })
   }, [])
+
+  const setupQuestion = (question: IQuestion) => {
+    setQuestion(question.title)
+    setChoices(question.choices)
+  }
+  
   return (
     <div>
       <Head>
@@ -68,7 +83,7 @@ export default function Home() {
 
       <div className="absolute m-5">
         <Question
-          title="What do you think?"
+          title={question}
           choices={choices}
         />
       </div>
