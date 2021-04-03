@@ -23,6 +23,14 @@ class QuestionManager {
         this.isHide = isHide
     }
 
+    hideToggle() {
+        this.setHide(!this.isHide)
+    }
+
+    getHide(){
+        return this.isHide
+    }
+
     vote(title, voterName) {
         if (this.isAlreadyVote(voterName)) return
 

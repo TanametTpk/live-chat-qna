@@ -13,8 +13,11 @@ const Admin = () => {
     const [isHiding, setHiding] = useState<boolean>(false)
 
     useEffect(() => {
-        socket.on("connect", (data: IQuestion) => {
+        socket.on("connect", () => {
             console.log("connected");
+        })
+
+        socket.on("question:new", (data: IQuestion) => {
             setQuestion(data.title)
             setChoices(data.choices)
             setHiding(data.isHide)

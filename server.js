@@ -12,21 +12,29 @@ nextApp.prepare().then(() => {
     const app = express()
     const server = http.Server(app)
     const io = socket(server)
-    let question =
+    let questionManager = new QuestionManager("", [], true)
 
     io.on("connection", (socket) => {
         socket.on("question:update", newQuestion => {
-
-            io.emit("question:new", newQuestion)
+            questionManager = new QuestionManager(
+                question.title,
+                question.choices,
+                question.isHide
+            )
+            io.emit("question:new", questionManager.getQuestion())
         })
 
-        socket.on("question:hideToggle", question => {
-
+        socket.on("question:hideToggle", (question, cb) => {
+            questionManager.hideToggle()
+            cb(questionManager.getQuestion())
         })
 
         socket.on("question:clearVote", () => {
-
+            questionManager.clearVote()
+            io.emit("question:new", questionManager.getQuestion())
         })
+
+        socket.emit("question:new", questionManager.getQuestion())
     })
 
     app.get("/vote", (req, res) => {

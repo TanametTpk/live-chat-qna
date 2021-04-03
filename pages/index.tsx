@@ -46,10 +46,8 @@ export default function Home() {
   const [choices, setChoices] = useState<IChoice[]>([])
 
   useEffect(() => {
-    socket.on("connect", (data: IQuestion) => {
-      // send current state here and set it.
+    socket.on("connect", () => {
       console.log("connected");
-      setupQuestion(data)
     })
 
     socket.on("vote", (data: IChoice) => {
