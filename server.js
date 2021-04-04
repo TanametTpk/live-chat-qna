@@ -2,6 +2,7 @@ const express = require('express')
 const http = require('http')
 const socket = require('socket.io')
 const next = require('next')
+const QuestionManager = require('./server/QuestionManager')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'

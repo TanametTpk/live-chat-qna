@@ -1,4 +1,3 @@
-
 class QuestionManager {
     constructor(title, choices, isHide) {
         this.title = title
@@ -54,7 +53,8 @@ class QuestionManager {
             return this.choices[title].voteCount + total
         }, 0)
 
-        return this.choices.map((choice) => {
+        return allTitles.map((title) => {
+            let choice = this.choices[title]
             return {
                 ...choice,
                 percent: choice.voteCount / totalVote * 100
@@ -70,3 +70,5 @@ class QuestionManager {
         }
     }
 }
+
+module.exports = QuestionManager
