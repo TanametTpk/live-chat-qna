@@ -5,6 +5,8 @@ import IChoice from '../interfaces/Choice'
 import IQuestion from '../interfaces/Question'
 import socketIOClient  from 'socket.io-client'
 import QuestionForm from '../components/Forms/QuestionForm'
+import ControlPanel from '../components/ControlPanel'
+import AdminSection from '../components/AdminSection'
 
 const socket = socketIOClient("http://localhost:3000")
 const Admin = () => {
@@ -24,9 +26,11 @@ const Admin = () => {
         })
 
         return (() => {
+            console.log("disconnect");
+            
             socket.disconnect()
         })
-    })
+    }, [])
 
     const updateNewQuestion = (title: string, choices: IChoice[]) => {
         let newQuestion: IQuestion = {
@@ -34,6 +38,8 @@ const Admin = () => {
             choices,
             isHide: isHiding
         }
+        console.log(newQuestion, "here");
+        
         socket.emit("question:update", newQuestion)
     }
 
@@ -47,14 +53,6 @@ const Admin = () => {
         socket.emit("question:clearVote")
     }
 
-    const addChoice = (choice: IChoice) => {
-        setChoices([...choices, choice])
-    }
-
-    const removeChoice = (index: number) => {
-        setChoices(choices.filter((_, idx: number) => index !== idx))
-    }
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-500 to-yellow-500">
             <Head>
@@ -66,24 +64,38 @@ const Admin = () => {
                 <div className="relative">
                     <div className="absolute m-5">
                         <Question
+                            hide={isHiding}
+                            hideOpacity={25}
                             title={question}
                             choices={choices}
                         />
                     </div>
                 </div>
 
-                <div>
-                    form
+                <AdminSection
+                    title="Update Question"
+                >
                     <QuestionForm 
                         submit={updateNewQuestion}
                     />
-                </div>
+                </AdminSection>
 
-                <div>
-                    control panel
-                    <button>clear votes</button>
-                    <button>{isHiding ? "show": "hide"} question</button>
-                </div>
+                <AdminSection
+                    title="Control Panel"
+                >
+                    <ControlPanel
+                        buttons={[
+                            {
+                                text: isHiding ? "Show" : "Hide",
+                                action: hideQuestionToggle
+                            },
+                            {
+                                text: "Clear Vote",
+                                action: clearVote
+                            }
+                        ]}
+                    />
+                </AdminSection>
             </div>
         </div>
     )

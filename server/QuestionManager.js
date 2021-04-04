@@ -55,9 +55,11 @@ class QuestionManager {
 
         return allTitles.map((title) => {
             let choice = this.choices[title]
+            let percent = 0
+            if (totalVote > 0) percent = choice.voteCount / totalVote * 100
             return {
                 ...choice,
-                percent: choice.voteCount / totalVote * 100
+                percent: 10
             }
         })
     }

@@ -4,7 +4,7 @@ import IChoice from '../interfaces/Choice'
 const Choice: React.FC<IChoice> = ({title, percent, voteCount, color}) => {
     return (
         <div
-            className="bg-white p-4 grid grid-cols-1 gap-2 rounded-md shadow-md border-2"
+            className="bg-white p-4 grid grid-cols-1 gap-2 rounded-md shadow-md border-2 min-w-12"
             style={{borderColor: color}}
         >
             <h4 className="font-semibold text-lg flex justify-between">
@@ -12,7 +12,7 @@ const Choice: React.FC<IChoice> = ({title, percent, voteCount, color}) => {
                     {title}
                 </div>
                 <div>
-                    {percent.toFixed(1)}%
+                    {percent ? percent.toFixed(1) : 0}%
                 </div>
             </h4>
             <div className="bg-gray-200 min-w-full h-1.5 rounded-full">

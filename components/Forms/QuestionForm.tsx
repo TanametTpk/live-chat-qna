@@ -24,6 +24,7 @@ const QuestionForm: React.FC<Props> = ({submit}) => {
         },
         onSubmit: values => {
             submit(values.title, values.choices)
+            formik.resetForm()
         }
     })
 
@@ -36,7 +37,7 @@ const QuestionForm: React.FC<Props> = ({submit}) => {
     }
 
     return (
-        <div>
+        <div className="grid grid-cols-1 gap-3">
             <Input
                 placeholder="Enter Question"
                 size="large"
@@ -57,23 +58,40 @@ const QuestionForm: React.FC<Props> = ({submit}) => {
                         percent: 50,
                         voteCount: 0
                     }
-                    formik.setFieldValue('choices', [
-                        ...formik.values.choices,
-                        choice
-                    ])
+
+                    let isHaveSameTitle = formik.values.choices.some((choice) => {
+                        return choice.title === value
+                    })
+
+                    if (!isHaveSameTitle)
+                        formik.setFieldValue('choices', [
+                            ...formik.values.choices,
+                            choice
+                        ])
                     formik.setFieldValue('choice', '')
                 }}
                 allowClear
             />
-            <EditableChoiceList
-                removeHandler={removeChoiceHandler}
-                choices={formik.values.choices}
-            />
             <Button
+                type="primary"
                 onClick={() => formik.handleSubmit()}
             >
                 Update
             </Button>
+            <div>
+                <h3
+                    className="text-white text-xl"
+                >
+                    Previews
+                </h3>
+
+                <div>
+                    <EditableChoiceList
+                        removeHandler={removeChoiceHandler}
+                        choices={formik.values.choices}
+                    />
+                </div>
+            </div>
         </div>
     )
 }

@@ -28,6 +28,7 @@ nextApp.prepare().then(() => {
         socket.on("question:hideToggle", (cb) => {
             questionManager.hideToggle()
             cb(questionManager.getQuestion())
+            io.emit("question:new", questionManager.getQuestion())
         })
 
         socket.on("question:clearVote", () => {
