@@ -5,6 +5,7 @@ import IChoice from '../interfaces/Choice'
 import IQuestion from '../interfaces/Question'
 import socketIOClient  from 'socket.io-client'
 import EditableChoiceList from '../components/EditableChoiceList'
+import QuestionForm from '../components/Forms/QuestionForm'
 
 const socket = socketIOClient("http://localhost:3000")
 const Admin = () => {
@@ -28,13 +29,7 @@ const Admin = () => {
         })
     })
 
-    const updateNewQuestion = () => {
-        let newQuestion: IQuestion = {
-            title: question,
-            choices,
-            isHide: isHiding,
-        }
-
+    const updateNewQuestion = (newQuestion: IQuestion) => {
         socket.emit("question:update", newQuestion)
     }
 
@@ -57,7 +52,7 @@ const Admin = () => {
     }
 
     return (
-        <div>
+        <div className="min-h-screen bg-gradient-to-br from-red-500 to-yellow-500">
             <Head>
                 <title>Create new Question</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -75,9 +70,9 @@ const Admin = () => {
 
                 <div>
                     form
-                    <input />
-                    <EditableChoiceList choices={choices} />
-                    <button>update question</button>
+                    <QuestionForm 
+                        submit={updateNewQuestion}
+                    />
                 </div>
 
                 <div>
