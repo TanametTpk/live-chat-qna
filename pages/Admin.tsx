@@ -4,7 +4,6 @@ import Question from '../components/Question'
 import IChoice from '../interfaces/Choice'
 import IQuestion from '../interfaces/Question'
 import socketIOClient  from 'socket.io-client'
-import EditableChoiceList from '../components/EditableChoiceList'
 import QuestionForm from '../components/Forms/QuestionForm'
 
 const socket = socketIOClient("http://localhost:3000")
@@ -29,7 +28,12 @@ const Admin = () => {
         })
     })
 
-    const updateNewQuestion = (newQuestion: IQuestion) => {
+    const updateNewQuestion = (title: string, choices: IChoice[]) => {
+        let newQuestion: IQuestion = {
+            title,
+            choices,
+            isHide: isHiding
+        }
         socket.emit("question:update", newQuestion)
     }
 

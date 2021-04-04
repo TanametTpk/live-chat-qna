@@ -16,7 +16,7 @@ nextApp.prepare().then(() => {
     let questionManager = new QuestionManager("", [], true)
 
     io.on("connection", (socket) => {
-        socket.on("question:update", newQuestion => {
+        socket.on("question:update", question => {
             questionManager = new QuestionManager(
                 question.title,
                 question.choices,
@@ -25,7 +25,7 @@ nextApp.prepare().then(() => {
             io.emit("question:new", questionManager.getQuestion())
         })
 
-        socket.on("question:hideToggle", (question, cb) => {
+        socket.on("question:hideToggle", (cb) => {
             questionManager.hideToggle()
             cb(questionManager.getQuestion())
         })

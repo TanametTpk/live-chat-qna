@@ -1,36 +1,48 @@
 import { Button, Input } from 'antd'
 import Search from 'antd/lib/input/Search'
 import React from 'react'
-import IQuestion from '../../interfaces/Question'
 import EditableChoiceList from '../EditableChoiceList'
 import { useFormik } from 'formik'
 import IChoice from '../../interfaces/Choice'
 
 interface Props {
-    submit: (newQuestion: IQuestion) => void
+    submit: (title: string, choices: IChoice[]) => void
+}
+
+interface QuestionForm {
+    title: string
+    choice: string
+    choices: IChoice[]
 }
 
 const QuestionForm: React.FC<Props> = ({submit}) => {
-
-    const formik = useFormik({
+    const formik = useFormik<QuestionForm>({
         initialValues: {
-            name: '',
+            title: '',
             choice: '',
             choices: []
         },
         onSubmit: values => {
-            console.log(values);
+            submit(values.title, values.choices)
         }
     })
+
+    const removeChoiceHandler = (target: number) => {
+        formik.setFieldValue('choices', 
+            formik.values.choices.filter((_, index: number) => {
+                return index !== target
+            })
+        )
+    }
 
     return (
         <div>
             <Input
                 placeholder="Enter Question"
                 size="large"
-                name="name"
+                name="title"
                 onChange={formik.handleChange}
-                value={formik.values.name}
+                value={formik.values.title}
             />
             <Search
                 placeholder="Enter Choice"
@@ -49,12 +61,14 @@ const QuestionForm: React.FC<Props> = ({submit}) => {
                         ...formik.values.choices,
                         choice
                     ])
-                    console.log("test");
-                    
+                    formik.setFieldValue('choice', '')
                 }}
                 allowClear
             />
-            <EditableChoiceList choices={formik.values.choices} />
+            <EditableChoiceList
+                removeHandler={removeChoiceHandler}
+                choices={formik.values.choices}
+            />
             <Button
                 onClick={() => formik.handleSubmit()}
             >
