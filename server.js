@@ -4,7 +4,7 @@ const socket = require('socket.io')
 const next = require('next')
 const QuestionManager = require('./server/QuestionManager')
 
-const port = parseInt(process.env.PORT, 10) || 3000
+const port = parseInt(process.env.PORT, 10) || 5000
 const dev = process.env.NODE_ENV !== 'production'
 const nextApp = next({ dev })
 const handle = nextApp.getRequestHandler()
@@ -43,8 +43,11 @@ nextApp.prepare().then(() => {
     app.use(express.urlencoded({extended: true}))
 
     app.post("/vote", (req, res) => {
-        let vote = req.body
-        questionManager.vote(vote.message, vote.author_name)
+        let votes = req.body
+        votes.map((vote) => {
+            questionManager.vote(vote.message, vote.author_name)
+        })
+        
         io.emit("question:new", questionManager.getQuestion())
         res.status(200).send()
     })

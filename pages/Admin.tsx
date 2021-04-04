@@ -10,7 +10,7 @@ import AdminSection from '../components/AdminSection'
 import Card from '../components/Card'
 import addColor2Choice from '../libs/addColor2Choice'
 
-const socket = socketIOClient("http://localhost:3000")
+const socket = socketIOClient("http://localhost:5000")
 const Admin = () => {
     const [question, setQuestion] = useState<string>("")
     const [choices, setChoices] = useState<IChoice[]>([])

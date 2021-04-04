@@ -6,13 +6,7 @@ import { useEffect, useState } from 'react'
 import IQuestion from '../interfaces/Question'
 import addColor2Choice from '../libs/addColor2Choice'
 
-const colors: string[] = [
-  "rgba(52, 211, 153, 1)",
-  "rgba(96, 165, 250, 1)",
-  "rgba(248, 113, 113, 1)"
-]
-
-const socket = socketIOClient("http://localhost:3000")
+const socket = socketIOClient("http://localhost:5000")
 export default function Home() {
   const [question, setQuestion] = useState<string>("-")
   const [choices, setChoices] = useState<IChoice[]>([])
