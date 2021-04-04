@@ -80,12 +80,12 @@ const QuestionForm: React.FC<Props> = ({submit}) => {
             </Button>
             <div>
                 <h3
-                    className="text-white text-xl"
+                    className="text-gray-700 text-xl"
                 >
                     Previews
                 </h3>
 
-                <div>
+                <div className="border-gray-300 border-dashed border-2 rounded-sm p-2 mt-3">
                     <EditableChoiceList
                         removeHandler={removeChoiceHandler}
                         choices={formik.values.choices}

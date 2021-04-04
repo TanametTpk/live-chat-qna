@@ -39,9 +39,13 @@ nextApp.prepare().then(() => {
         socket.emit("question:new", questionManager.getQuestion())
     })
 
-    app.get("/vote", (req, res) => {
+    app.use(express.json())
+    app.use(express.urlencoded({extended: true}))
 
-        io.emit("vote", 1)
+    app.post("/vote", (req, res) => {
+        let vote = req.body
+        questionManager.vote(vote.message, vote.author_name)
+        io.emit("question:new", questionManager.getQuestion())
         res.status(200).send()
     })
 

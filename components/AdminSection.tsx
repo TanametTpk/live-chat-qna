@@ -6,7 +6,7 @@ interface Props {
 
 const AdminSection: React.FC<Props> = ({title, children}) => {
     return (
-        <div className="grid grid-cols-1 gap-4 p-4">
+        <div className="p-4 flex flex-col space-y-4">
             <h2
                 className="text-white text-3xl"
             >

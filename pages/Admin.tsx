@@ -7,6 +7,8 @@ import socketIOClient  from 'socket.io-client'
 import QuestionForm from '../components/Forms/QuestionForm'
 import ControlPanel from '../components/ControlPanel'
 import AdminSection from '../components/AdminSection'
+import Card from '../components/Card'
+import addColor2Choice from '../libs/addColor2Choice'
 
 const socket = socketIOClient("http://localhost:3000")
 const Admin = () => {
@@ -27,7 +29,6 @@ const Admin = () => {
 
         return (() => {
             console.log("disconnect");
-            
             socket.disconnect()
         })
     }, [])
@@ -38,8 +39,6 @@ const Admin = () => {
             choices,
             isHide: isHiding
         }
-        console.log(newQuestion, "here");
-        
         socket.emit("question:update", newQuestion)
     }
 
@@ -60,14 +59,14 @@ const Admin = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 min-h-screen">
                 <div className="relative">
                     <div className="absolute m-5">
                         <Question
                             hide={isHiding}
                             hideOpacity={25}
                             title={question}
-                            choices={choices}
+                            choices={addColor2Choice(choices)}
                         />
                     </div>
                 </div>
@@ -75,26 +74,30 @@ const Admin = () => {
                 <AdminSection
                     title="Update Question"
                 >
-                    <QuestionForm 
-                        submit={updateNewQuestion}
-                    />
+                    <Card>
+                        <QuestionForm 
+                            submit={updateNewQuestion}
+                        />
+                    </Card>
                 </AdminSection>
 
                 <AdminSection
                     title="Control Panel"
                 >
-                    <ControlPanel
-                        buttons={[
-                            {
-                                text: isHiding ? "Show" : "Hide",
-                                action: hideQuestionToggle
-                            },
-                            {
-                                text: "Clear Vote",
-                                action: clearVote
-                            }
-                        ]}
-                    />
+                    <Card>
+                        <ControlPanel
+                            buttons={[
+                                {
+                                    text: isHiding ? "Show" : "Hide",
+                                    action: hideQuestionToggle
+                                },
+                                {
+                                    text: "Clear Vote",
+                                    action: clearVote
+                                }
+                            ]}
+                        />
+                    </Card>
                 </AdminSection>
             </div>
         </div>

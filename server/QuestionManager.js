@@ -8,7 +8,7 @@ class QuestionManager {
         choices.map((choice) => {
             this.choices = {
                 ...this.choices,
-                [choice.title]: choice
+                [choice.title.toLowerCase()]: choice
             }
         })
     }
@@ -33,15 +33,19 @@ class QuestionManager {
     vote(title, voterName) {
         if (this.isAlreadyVote(voterName)) return
 
-        if (this.choices[title]) {
-            this.choices[title].voteCount += 1
+        if (this.haveChoice(title)) {
+            this.choices[title.toLowerCase()].voteCount += 1
             this.voter[voterName] = true
         }
     }
 
+    haveChoice(name) {
+        return this.choices[name.toLowerCase()]
+    }
+
     clearVote() {
         this.voter = {}
-        allTitles = Object.keys(this.choices)
+        let allTitles = Object.keys(this.choices)
         allTitles.map((title) => {
             this.choices[title].voteCount = 0
         })
@@ -59,7 +63,7 @@ class QuestionManager {
             if (totalVote > 0) percent = choice.voteCount / totalVote * 100
             return {
                 ...choice,
-                percent: 10
+                percent
             }
         })
     }

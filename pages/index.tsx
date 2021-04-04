@@ -4,6 +4,7 @@ import IChoice from '../interfaces/Choice'
 import socketIOClient  from 'socket.io-client'
 import { useEffect, useState } from 'react'
 import IQuestion from '../interfaces/Question'
+import addColor2Choice from '../libs/addColor2Choice'
 
 const colors: string[] = [
   "rgba(52, 211, 153, 1)",
@@ -23,7 +24,6 @@ export default function Home() {
     })
 
     socket.on("vote", (data: IChoice) => {
-      console.log("receive", data);
       setChoices(choices.map((choice) => {
         if (choice.title === data.title) return data
         return choice
@@ -35,6 +35,7 @@ export default function Home() {
     })
 
     return (() => {
+      console.log("disconnect");
       socket.disconnect()
     })
   }, [])
@@ -43,17 +44,6 @@ export default function Home() {
     setQuestion(question.title)
     setChoices(question.choices)
     setHiding(question.isHide)
-  }
-
-  const addColor2Choice = () => {
-    return choices.map((choice: IChoice, index: number) => {
-      let MAX_COLOR: number = colors.length
-      if (choice.percent > 0 && index < MAX_COLOR) {
-        let color: string = colors[index % MAX_COLOR]
-        choice["color"] = color
-      }
-      return choice
-    })
   }
   
   return (
@@ -68,7 +58,7 @@ export default function Home() {
           hide={isHiding}
           hideOpacity={0}
           title={question}
-          choices={addColor2Choice()}
+          choices={addColor2Choice(choices)}
         />
       </div>
     </div>
